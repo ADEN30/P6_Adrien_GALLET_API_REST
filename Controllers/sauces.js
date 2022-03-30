@@ -1,6 +1,7 @@
 const Sauce = require("../Models/sauces");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const sauces = require("../Models/sauces");
 
 exports.getAllsauce = (req, res, next) =>{
     Sauce.find()
@@ -88,7 +89,7 @@ exports.likeSauce = (req, res, next) =>{
         .then((sauce) =>{
             switch(req.body.like){
                 case -1: {
-                    sauce.dislikes = sauce.dislikes +1;
+                    sauce.dislikes += 1;
                     sauce.usersDisliked.push(req.auth.userId);
                     sauce.save()
                     .then(()=> res.status(200).json({message: "Disliked"}))
@@ -97,12 +98,14 @@ exports.likeSauce = (req, res, next) =>{
                 }  
                 case 0:{
                     const dislike = sauce.usersDisliked.indexOf(req.auth.userId);
-                    const like = sauce.usersLiked.indexOf(dislike);
-                    if(sauce.usersDisliked.splice(req.auth.userId)){
-                        sauce.dislikes = sauce.dislikes -1;
+                    const like = sauce.usersLiked.indexOf(req.auth.userId);
+                    if(dislike != -1){
+                        sauce.usersDisliked.splice(dislike);
+                        sauce.dislikes -= 1;
                     }
-                    else if(sauce.usersLiked.splice(like)){
-                        sauce.like = sauce.like -1;
+                    else{
+                        sauce.usersLiked.splice(like);
+                        sauce.likes -= 1;
                     }
                     sauce.save()
                     .then(() => res.status(200).json({message: "Unlike and undisliked"}))
@@ -110,8 +113,7 @@ exports.likeSauce = (req, res, next) =>{
                     break;
                 }
                 case 1: {
-                    sauce.dislikes = sauce.likes +1;
-                    console.log(sauce.usersLiked);
+                    sauce.likes +=1;
                     sauce.usersLiked.push(req.auth.userId);
                     sauce.save()
                     .then(() => res.status(200).json({message: "Liked"}))
