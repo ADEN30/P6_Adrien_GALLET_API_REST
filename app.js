@@ -7,7 +7,7 @@ const path = require("path");
 
 const app = express();
 
-mongoose.connect("mongodb+srv://Zed:Validation68@cluster0.7sk11.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect("mongodb+srv://"+process.env.Utilisateur+":"+ process.env.MP+"@cluster0.7sk11.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true})
     .then(()=> console.log("Connexion à MongoDB réussie"))
     .catch(()=> console.log("Connexion à MongoDB échouée"));
   
