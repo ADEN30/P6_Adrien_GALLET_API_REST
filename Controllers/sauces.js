@@ -3,7 +3,7 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const sauces = require("../Models/sauces");
 
-exports.getAllsauce = (req, res, next) =>{
+exports.getAllsauce = (req, res, next) =>{ //Envois toutes les sauces au front-end
     Sauce.find()
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({error}));
@@ -17,7 +17,7 @@ exports.getOnesauce = (req,res, next) =>{
         .catch(error => res.status(404).json({error}));
 };
 
-exports.CreateSauce = (req,res, next) =>{
+exports.CreateSauce = (req,res, next) =>{ //Créé une nouvel sauce 
     const objet = JSON.parse(req.body.sauce);
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token,"RANDOM_SECRET_TOKEN");
@@ -35,7 +35,7 @@ exports.CreateSauce = (req,res, next) =>{
         .catch(error => res.status(400).json({error}));
 };
 
-exports.ModifySauce = (req, res, next) =>{
+exports.ModifySauce = (req, res, next) =>{ // Modifie une sauce
     Sauce.findOne({_id: req.params.id})
         .then((data)=> {
             const sauce = req.file ?
@@ -66,7 +66,7 @@ exports.ModifySauce = (req, res, next) =>{
     
 };
 
-exports.deleteSauce = (req, res, next) => {
+exports.deleteSauce = (req, res, next) => { // Supprime une sauce
     Sauce.findOne({_id: req.params.id})
     .then(sauce => {
         if(sauce.userId != req.auth.userId){
@@ -84,7 +84,7 @@ exports.deleteSauce = (req, res, next) => {
           
 };
 
-exports.likeSauce = (req, res, next) =>{
+exports.likeSauce = (req, res, next) =>{ //permet de gérer les likes/dislikes d'une sauce
     Sauce.findOne({_id: req.params.id})
         .then((sauce) =>{
             switch(req.body.like){
